@@ -1,0 +1,36 @@
+group 'info.tylerbauer.rpislideshow'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'application'
+
+task runApp(type: JavaExec) {
+    classpath =  sourceSets.main.runtimeClasspath
+
+    main = 'Main'
+}
+
+sourceCompatibility = 1.8
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main']
+        }
+        resources {
+            srcDirs = ['src/resources']
+        }
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    compile 'com.google.apis:google-api-services-drive:v2-rev306-1.23.0'
+    // https://mvnrepository.com/artifact/org.glassfish.jersey.core/jersey-client
+    compile group: 'org.glassfish.jersey.core', name: 'jersey-client', version: '2.27'
+}
