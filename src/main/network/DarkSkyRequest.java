@@ -1,5 +1,7 @@
 package network;
 
+import org.glassfish.jersey.client.ClientResponse;
+
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Invocation;
@@ -9,29 +11,50 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 public class DarkSkyRequest {
+    private String secret;
+    private String lat;
+    private String lng;
+    private String address;
+
     private String baseUrl = "https://api.darksky.net/forecast/";
-    private String lat = "150";
-    private String lng = "150";
     private String exclude = "?exclude=minutely,hourly,alerts,flags";
 
-    private final String FORECAST = "forecast";
-    private final String CURRENT = "current";
-//    current: 'daily',
-//    forecast: 'currently'
+    public static final String FORECAST = "forecast";
+    public static final String CURRENT = "current";
 
-    private String createPath(String type){
-        return "";
-//        return baseUrl + key + '/' + lat + ',' + lng + exclude + ',' + type;
+    public DarkSkyRequest(String secret, String lat, String lng, String address) {
+        this.secret = secret;
+
+        String realLat = lat;
+        String realLng = lng;
+        if (realLat == null || realLng == null) {
+            Object result = GoogleGeo.getLatLng(address);
+        }
+
+        this.lat = realLat;
+        this.lng = realLng;
     }
 
-    public String getWeather(String type){
-        Form form = new Form();
-        form.param("x", "foo");
-        form.param("y", "bar");
+    private String createPath(String type) {
+        String toExclude = "";
+        switch (type) {
+            case FORECAST:
+                toExclude = "currently";
+                break;
+            case CURRENT:
+                toExclude = "daily";
+                break;
+        }
+
+        return baseUrl + secret + "/" + lat + "," + lng + exclude + "," + toExclude;
+    }
+
+    public String getWeather(String type) {
+        String requestURL = createPath(type);
 
         Client client = ClientBuilder.newClient();
 
-        WebTarget resource = client.target("http://localhost:8080/someresource");
+        WebTarget resource = client.target(requestURL);
 
         Invocation.Builder request = resource.request();
         request.accept(MediaType.APPLICATION_JSON);
