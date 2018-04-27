@@ -1,3 +1,5 @@
+import controllers.MainController;
+import controllers.WeatherControllerCurrent;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -5,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import network.DarkSkyRequest;
 import network.GoogleDriveRequest;
+import network.model.WeatherCurrentModel;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -36,15 +39,24 @@ public class Main extends Application {
         String lat = props.getProperty("user.lat", null);
         String lng = props.getProperty("user.lng", null);
         String address = props.getProperty("user.address");
+
         weatherRequest = new DarkSkyRequest(secret, lat, lng, address);
     }
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("main.fxml"));
-        primaryStage.setTitle("Hello World");
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("main.fxml"));
+        Parent root = loader.load();
+        MainController control = loader.getController();
+
+        primaryStage.setTitle("RPISlideShow");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
+
+        WeatherCurrentModel model = weatherRequest.getWeatherCurrent();
+        System.out.println(model);
+        System.out.println(control == null);
+        control.updateCurrent(model);
     }
 
 
