@@ -1,10 +1,7 @@
 package network;
 
 import controllers.MainController;
-import network.model.DarkSkyResponseCurrent;
-import network.model.DarkSkyResponseForecast;
-import network.model.WeatherCurrentModel;
-import network.model.WeatherDayModel;
+import network.model.*;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -26,17 +23,10 @@ public class DarkSkyRequest {
     public static final String FORECAST = "forecast";
     public static final String CURRENT = "current";
 
-    public DarkSkyRequest(String secret, String lat, String lng, String address) {
+    public DarkSkyRequest(String secret, String lat, String lng) {
         this.secret = secret;
-
-        String realLat = lat;
-        String realLng = lng;
-        if (realLat == null || realLng == null) {
-            Object result = GoogleGeo.getLatLng(address);
-        }
-
-        this.lat = realLat;
-        this.lng = realLng;
+        this.lat = lat;
+        this.lng = lng;
 
         this.darkClient = ClientBuilder.newClient();
     }

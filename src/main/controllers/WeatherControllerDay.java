@@ -1,8 +1,10 @@
 package controllers;
 
+import assets.WeatherIcon;
 import javafx.fxml.FXML;
 import javafx.scene.shape.SVGPath;
 import javafx.scene.text.Text;
+import network.model.WeatherDayModel;
 
 public class WeatherControllerDay {
 
@@ -18,15 +20,15 @@ public class WeatherControllerDay {
     private Text precipitation;
 
     private final String tempSymbol = " \u00b0F";
-    private final String windSymbol = "MPH";
+    private final String windSymbol = " MPH";
     private final String precipSymbol = "%";
 
-    public void updateDay(String icon, double tempHigh, double tempLow, double wind, double precipitation){
-        this.tempHigh.setText(tempHigh + tempSymbol);
-        this.tempLow.setText(tempLow + tempSymbol);
-        this.wind.setText(wind + windSymbol);
-        this.precipitation.setText(precipitation + precipSymbol);
+    public void update(WeatherDayModel model){
+        this.tempHigh.setText(Math.round(model.tempHigh) + this.tempSymbol);
+        this.tempLow.setText(Math.round(model.tempLow) + this.tempSymbol);
+        this.wind.setText(Math.round(model.wind) + this.windSymbol);
+        this.precipitation.setText(Math.round(model.precip * 100) + this.precipSymbol);
 
-        this.icon.setContent(icon);
+        this.icon.setContent(WeatherIcon.icon(model.icon));
     }
 }

@@ -7,18 +7,23 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import network.DarkSkyRequest;
 import network.GoogleDriveRequest;
+import network.GoogleGeo;
+import network.model.GeoLoc;
 import network.model.WeatherCurrentModel;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Properties;
 
 public class Main extends Application {
 
-    private DarkSkyRequest weatherRequest;
-    private GoogleDriveRequest driveRequest;
+    private Properties props;
+    private String propLoc;
 
     public Main(){
         super();
@@ -26,7 +31,9 @@ public class Main extends Application {
         Properties props = new Properties();
         try {
             URL propFile = getClass().getResource("config/applicationConfig.properties");
-            FileInputStream in = new FileInputStream(propFile.getFile());
+            String fileLoc = propFile.getFile();
+            propLoc = fileLoc;
+            FileInputStream in = new FileInputStream(fileLoc);
             props.load(in);
             in.close();
         } catch (FileNotFoundException e) {
@@ -35,12 +42,7 @@ public class Main extends Application {
             System.out.println("There was an error processing the file");
         }
 
-        String secret = props.getProperty("darksky.secret");
-        String lat = props.getProperty("user.lat", null);
-        String lng = props.getProperty("user.lng", null);
-        String address = props.getProperty("user.address");
-
-        weatherRequest = new DarkSkyRequest(secret, lat, lng, address);
+        this.props = props;
     }
 
     @Override
@@ -53,10 +55,21 @@ public class Main extends Application {
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
 
-        WeatherCurrentModel model = weatherRequest.getWeatherCurrent();
-        System.out.println(model);
-        System.out.println(control == null);
-        control.updateCurrent(model);
+        String secret = props.getProperty("darksky.secret");
+        String lat = props.getProperty("user.lat", null);
+        String lng = props.getProperty("user.lng", null);
+        String address = props.getProperty("user.address");
+
+        if (lat == null || lng == null) {
+            GeoLoc result = GoogleGeo.getLatLng(address);
+            lat = result.lat;
+            lng = result.lng;
+            props.setProperty("user.lat", lat);
+            props.setProperty("user.lng", lng);
+            props.store(new FileOutputStream(propLoc), "---Updated on " + DateTimeFormatter.ISO_DATE_TIME.format(ZonedDateTime.now()) + "---");
+        }
+
+        control.setWeatherRequest(new DarkSkyRequest(secret, lat, lng));
     }
 
 
