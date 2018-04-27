@@ -6,9 +6,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class DarkSkyResponseCurrent {
     @JsonProperty
-    public WeatherCurrentModel currently;
+    private WeatherCurrentModel currently;
 
     public DarkSkyResponseCurrent() {}
+
+    public WeatherCurrentModel getData() {
+        return currently;
+    }
 
     public String toString(){
         return currently.toString();

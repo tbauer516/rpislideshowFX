@@ -6,9 +6,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class DarkSkyResponseForecast {
     @JsonProperty
-    public DailyWrapper daily;
+    private DailyWrapper daily;
 
     public DarkSkyResponseForecast() {}
+
+    public WeatherDayModel[] getData() {
+        return daily.data;
+    }
 
     public String toString(){
         return daily.toString();

@@ -37,10 +37,6 @@ public class Main extends Application {
         String lng = props.getProperty("user.lng", null);
         String address = props.getProperty("user.address");
         weatherRequest = new DarkSkyRequest(secret, lat, lng, address);
-
-        // for testing
-        weatherRequest.getWeatherCurrent();
-        weatherRequest.getWeatherForecast();
     }
 
     @Override

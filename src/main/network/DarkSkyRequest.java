@@ -1,5 +1,6 @@
 package network;
 
+import controllers.MainController;
 import network.model.DarkSkyResponseCurrent;
 import network.model.DarkSkyResponseForecast;
 import network.model.WeatherCurrentModel;
@@ -67,7 +68,7 @@ public class DarkSkyRequest {
         Response response = makeRequest(requestURL);
         if (response.getStatusInfo().getFamily() == Response.Status.Family.SUCCESSFUL) {
             DarkSkyResponseCurrent resp = response.readEntity(DarkSkyResponseCurrent.class);
-            return resp.currently;
+            return resp.getData();
         }
         System.out.println("ERROR! " + response.getStatus());
         System.out.println(response.getEntity());
@@ -79,7 +80,7 @@ public class DarkSkyRequest {
         Response response = makeRequest(requestURL);
         if (response.getStatusInfo().getFamily() == Response.Status.Family.SUCCESSFUL) {
             DarkSkyResponseForecast resp = response.readEntity(DarkSkyResponseForecast.class);
-            return resp.daily.data;
+            return resp.getData();
         }
         System.out.println("ERROR! " + response.getStatus());
         System.out.println(response.getEntity());
