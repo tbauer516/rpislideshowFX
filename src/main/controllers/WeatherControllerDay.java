@@ -4,7 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.shape.SVGPath;
 import javafx.scene.text.Text;
 
-public class WeatherDayController {
+public class WeatherControllerDay {
 
     @FXML
     private SVGPath icon;
@@ -17,7 +17,7 @@ public class WeatherDayController {
     @FXML
     private Text precipitation;
 
-    private final String tempSymbol = " °F";
+    private final String tempSymbol = " \u00b0F";
     private final String windSymbol = "MPH";
     private final String precipSymbol = "%";
 

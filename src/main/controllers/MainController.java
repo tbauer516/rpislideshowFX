@@ -5,19 +5,19 @@ import javafx.fxml.FXML;
 public class MainController {
 
     @FXML
-    private CurrentWeatherController current;
+    private WeatherControllerCurrent current;
     @FXML
-    private WeatherDayController day1;
+    private WeatherControllerDay day1;
     @FXML
-    private WeatherDayController day2;
+    private WeatherControllerDay day2;
     @FXML
-    private WeatherDayController day3;
+    private WeatherControllerDay day3;
     @FXML
-    private WeatherDayController day4;
+    private WeatherControllerDay day4;
     @FXML
-    private WeatherDayController day5;
+    private WeatherControllerDay day5;
     @FXML
-    private WeatherDayController day6;
+    private WeatherControllerDay day6;
 
 
 }

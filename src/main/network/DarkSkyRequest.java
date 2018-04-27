@@ -1,12 +1,14 @@
 package network;
 
-import org.glassfish.jersey.client.ClientResponse;
+import network.model.DarkSkyResponseCurrent;
+import network.model.DarkSkyResponseForecast;
+import network.model.WeatherCurrentModel;
+import network.model.WeatherDayModel;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.Form;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -14,7 +16,8 @@ public class DarkSkyRequest {
     private String secret;
     private String lat;
     private String lng;
-    private String address;
+
+    private Client darkClient;
 
     private String baseUrl = "https://api.darksky.net/forecast/";
     private String exclude = "?exclude=minutely,hourly,alerts,flags";
@@ -33,6 +36,8 @@ public class DarkSkyRequest {
 
         this.lat = realLat;
         this.lng = realLng;
+
+        this.darkClient = ClientBuilder.newClient();
     }
 
     private String createPath(String type) {
@@ -49,26 +54,35 @@ public class DarkSkyRequest {
         return baseUrl + secret + "/" + lat + "," + lng + exclude + "," + toExclude;
     }
 
-    public String getWeather(String type) {
-        String requestURL = createPath(type);
-
-        Client client = ClientBuilder.newClient();
-
-        WebTarget resource = client.target(requestURL);
-
+    private Response makeRequest(String requestURL) {
+        WebTarget resource = darkClient.target(requestURL);
         Invocation.Builder request = resource.request();
         request.accept(MediaType.APPLICATION_JSON);
-
         Response response = request.get();
+        return response;
+    }
 
+    public WeatherCurrentModel getWeatherCurrent() {
+        String requestURL = createPath(CURRENT);
+        Response response = makeRequest(requestURL);
         if (response.getStatusInfo().getFamily() == Response.Status.Family.SUCCESSFUL) {
-            System.out.println("Success! " + response.getStatus());
-            System.out.println(response.getEntity());
-        } else {
-            System.out.println("ERROR! " + response.getStatus());
-            System.out.println(response.getEntity());
+            DarkSkyResponseCurrent resp = response.readEntity(DarkSkyResponseCurrent.class);
+            return resp.currently;
         }
+        System.out.println("ERROR! " + response.getStatus());
+        System.out.println(response.getEntity());
+        return null;
+    }
 
-        return "";
+    public WeatherDayModel[] getWeatherForecast() {
+        String requestURL = createPath(FORECAST);
+        Response response = makeRequest(requestURL);
+        if (response.getStatusInfo().getFamily() == Response.Status.Family.SUCCESSFUL) {
+            DarkSkyResponseForecast resp = response.readEntity(DarkSkyResponseForecast.class);
+            return resp.daily.data;
+        }
+        System.out.println("ERROR! " + response.getStatus());
+        System.out.println(response.getEntity());
+        return null;
     }
 }
