@@ -30,7 +30,10 @@ repositories {
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
+
     compile 'com.google.apis:google-api-services-drive:v2-rev306-1.23.0'
+    compile 'com.google.api-client:google-api-client:1.23.0'
+    compile 'com.google.oauth-client:google-oauth-client-jetty:1.23.0'
     // https://mvnrepository.com/artifact/org.glassfish.jersey.core/jersey-client
     compile 'org.glassfish.jersey.core:jersey-client:2.27'
     compile 'org.glassfish.jersey.inject:jersey-hk2:2.27'

@@ -73,6 +73,7 @@ public class Main extends Application {
         }
 
         control.setWeatherRequest(new DarkSkyRequest(secret, lat, lng));
+        GoogleDriveRequest drive = new GoogleDriveRequest(getClass().getResource("config").getPath());
     }
 
 
