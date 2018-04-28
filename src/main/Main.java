@@ -24,6 +24,7 @@ public class Main extends Application {
 
     private Properties props;
     private String propLoc;
+    private String picLoc;
 
     public Main(){
         super();
@@ -41,6 +42,8 @@ public class Main extends Application {
         } catch (IOException e) {
             System.out.println("There was an error processing the file");
         }
+
+        this.picLoc = getClass().getResource("pictures/").getPath();
 
         this.props = props;
     }
@@ -66,7 +69,7 @@ public class Main extends Application {
             lng = result.lng;
             props.setProperty("user.lat", lat);
             props.setProperty("user.lng", lng);
-            props.store(new FileOutputStream(propLoc), "---Updated on " + DateTimeFormatter.ISO_DATE_TIME.format(ZonedDateTime.now()) + "---");
+            props.store(new FileOutputStream(propLoc), "--- Updated on " + DateTimeFormatter.ISO_DATE_TIME.format(ZonedDateTime.now()) + " ---");
         }
 
         control.setWeatherRequest(new DarkSkyRequest(secret, lat, lng));
