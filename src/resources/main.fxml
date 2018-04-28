@@ -15,12 +15,12 @@
       <VBox prefWidth="250.0" styleClass="rightPane" AnchorPane.bottomAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" HBox.hgrow="NEVER">
          <children>
              <fx:include fx:id="current" source="views/currentWeather.fxml" />
-             <fx:include fx:id="day1" source="views/weatherForecast.fxml" />
-             <fx:include fx:id="day2" source="views/weatherForecast.fxml" />
-             <fx:include fx:id="day3" source="views/weatherForecast.fxml" />
-             <fx:include fx:id="day4" source="views/weatherForecast.fxml" />
-             <fx:include fx:id="day5" source="views/weatherForecast.fxml" />
-             <fx:include fx:id="day6" source="views/weatherForecast.fxml" />
+             <fx:include fx:id="day1" source="views/weatherForecast.fxml" VBox.vgrow="ALWAYS" />
+             <fx:include fx:id="day2" source="views/weatherForecast.fxml" VBox.vgrow="ALWAYS" />
+             <fx:include fx:id="day3" source="views/weatherForecast.fxml" VBox.vgrow="ALWAYS" />
+             <fx:include fx:id="day4" source="views/weatherForecast.fxml" VBox.vgrow="ALWAYS" />
+             <fx:include fx:id="day5" source="views/weatherForecast.fxml" VBox.vgrow="ALWAYS" />
+             <fx:include fx:id="day6" source="views/weatherForecast.fxml" VBox.vgrow="ALWAYS" />
          </children>
       </VBox>
    </children>
