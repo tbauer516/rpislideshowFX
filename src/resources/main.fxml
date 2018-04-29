@@ -11,7 +11,7 @@
       <URL value="@views/style.css" />
    </stylesheets>
    <children>
-      <Region styleClass="imageContainer" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="250.0" AnchorPane.topAnchor="0" />
+      <Region fx:id="pictureFrame" styleClass="imageContainer" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="250.0" AnchorPane.topAnchor="0" />
       <VBox prefWidth="250.0" styleClass="rightPane" AnchorPane.bottomAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" HBox.hgrow="NEVER">
          <children>
              <fx:include fx:id="current" source="views/currentWeather.fxml" />

@@ -15,10 +15,7 @@ import com.google.api.services.drive.DriveScopes;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.security.GeneralSecurityException;
 import java.util.*;
 
@@ -42,7 +39,7 @@ public class GoogleDriveRequest {
                     transport,
                     jsonFactory,
                     secrets,
-                    Collections.singletonList(DriveScopes.DRIVE_METADATA_READONLY))
+                    Collections.singletonList(DriveScopes.DRIVE_READONLY))
                     .setDataStoreFactory(new FileDataStoreFactory(datastore))
                     .setAccessType("offline")
                     .build();
@@ -61,64 +58,99 @@ public class GoogleDriveRequest {
         }
     }
 
-    public void sync() {
-        Set<String> localFiles = getFilesLocal();
-        Set<String> driveFiles = getFilesInDrive();
+    public List<java.io.File> getNewPicList() {
+        List<java.io.File> files = getFilesLocal();
+        for (int i = files.size() - 1; i >= 1; i--) {
+            int j = (int) (Math.random() * (i + 1));
+            java.io.File temp = files.get(i);
+            files.set(i, files.get(j));
+            files.set(j, temp);
+        }
 
-        Set<String> toRemove = getFilesToDelete(driveFiles, localFiles);
-        Set<String> toDownload = getFilesToDownload(driveFiles, localFiles);
+        return files;
     }
 
-    public Set<String> getFilesToDownload(Set<String> drive, Set<String> local) {
-        Set<String> driveCopy = new HashSet<>(drive);
+    public void sync() {
+        List<java.io.File> localFiles = getFilesLocal();
+        List<File> driveFiles = getFilesInDrive();
 
-        for (String name : driveCopy) {
-            if (local.contains(name))
-                driveCopy.remove(name);
+        List<java.io.File> toRemove = getFilesToDelete(driveFiles, localFiles);
+        List<File> toDownload = getFilesToDownload(driveFiles, localFiles);
+
+        for (java.io.File file : toRemove) {
+            file.delete();
+        }
+
+        for (File file : toDownload) {
+            try {
+                OutputStream out = new FileOutputStream(picLoc + "/" + file.getName().toLowerCase());
+                service.files().get(file.getId())
+                        .executeMediaAndDownloadTo(out);
+            } catch (FileNotFoundException e) {
+                System.out.println("Could not create file for " + file.getName());
+            } catch (IOException e) {
+                System.out.println("Download failed for " + file.getName());
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private List<File> getFilesToDownload(List<File> drive, List<java.io.File> local) {
+        List<File> driveCopy = new ArrayList<>(drive);
+        int size = driveCopy.size();
+
+        for (int i = size - 1; i >= 0; i--) {
+            File dfile = driveCopy.get(i);
+            for (java.io.File lfile : local) {
+                if (lfile.getName().equals(dfile.getName())) {
+                    driveCopy.remove(i);
+                    continue;
+                }
+            }
         }
 
         return driveCopy;
     }
 
-    public Set<String> getFilesToDelete(Set<String> drive, Set<String> local) {
-        Set<String> localCopy = new HashSet<>(local);
+    private List<java.io.File> getFilesToDelete(List<File> drive, List<java.io.File> local) {
+        List<java.io.File> localCopy = new ArrayList<>(local);
+        int size = localCopy.size();
 
-        for (String name : localCopy) {
-            if (!drive.contains(name))
-                localCopy.remove(name);
+        for (int i = size - 1; i >= 0; i--) {
+            java.io.File lfile = localCopy.get(i);
+            for (File dfile : drive) {
+                if (dfile.getName().equals(lfile.getName())) {
+                    localCopy.remove(i);
+                    continue;
+                }
+            }
         }
 
         return localCopy;
     }
 
-    public Set<String> getFilesInDrive() {
-        Set<String> fileSet = new HashSet<>();
+    private List<java.io.File> getFilesLocal() {
+        java.io.File folder = new java.io.File(picLoc);
+        List<java.io.File> files = Arrays.asList(folder.listFiles());
 
-        try {
-            FileList files = service.files().list()
-                    .setFields("files(id, name)")
-                    .setQ("mimeType = 'image/jpeg' or mimeType = 'image/png'")
-                    .execute();
-
-            for (File file : files.getFiles()) {
-                fileSet.add(file.getName());
-            }
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
+        List<java.io.File> fileSet = new ArrayList<>(files);
 
         return fileSet;
     }
 
-    public Set<String> getFilesLocal() {
-        java.io.File folder = new java.io.File(picLoc);
-        List<java.io.File> files = Arrays.asList(folder.listFiles());
+    private List<File> getFilesInDrive() {
+        List<File> files = new ArrayList<>();
 
-        Set<String> fileSet = new HashSet<>();
-        for (java.io.File file : files) {
-            fileSet.add(file.getName());
+        try {
+            FileList dfiles = service.files().list()
+                    .setFields("files(id, name)")
+                    .setQ("mimeType = 'image/jpeg' or mimeType = 'image/png'")
+                    .execute();
+
+            files = new ArrayList<>(dfiles.getFiles());
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
         }
-
-        return fileSet;
+        return files;
     }
 }

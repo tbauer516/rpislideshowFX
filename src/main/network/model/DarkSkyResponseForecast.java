@@ -11,7 +11,14 @@ public class DarkSkyResponseForecast {
     public DarkSkyResponseForecast() {}
 
     public WeatherDayModel[] getData() {
-        return daily.data;
+        WeatherDayModel[] days = daily.data;
+        WeatherDayModel[] trimmed = new WeatherDayModel[6];
+
+        for (int i = 1; i <= 6; i++) {
+            trimmed[i - 1] = days[i];
+        }
+
+        return trimmed;
     }
 
     public String toString(){

@@ -1,19 +1,28 @@
 package controllers;
 
 import javafx.fxml.FXML;
+import javafx.scene.image.Image;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Region;
+import manager.GoogleDriveManager;
 import network.DarkSkyRequest;
 import network.model.WeatherCurrentModel;
 import network.model.WeatherDayModel;
 
+import java.awt.*;
+import java.io.File;
+import java.net.MalformedURLException;
 import java.time.ZonedDateTime;
-import java.util.Calendar;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class MainController {
 
+    @FXML
+    private Region pictureFrame;
     @FXML
     private GridPane current;
     @FXML
@@ -31,13 +40,36 @@ public class MainController {
 
     private WeatherControllerCurrent currentController;
     private WeatherControllerDay[] dayControllers;
+    private ScheduledExecutorService executor;
+
+    public void setGoogleDrive(GoogleDriveManager gdrive) {
+        // sync the pictures from drive
+        executor.scheduleAtFixedRate(() -> {
+
+            gdrive.sync();
+
+        }, 0, 12, TimeUnit.HOURS);
+
+        // change picture in frame
+        executor.scheduleAtFixedRate(() -> {
+
+            File pic = gdrive.getPic();
+
+            try {
+                pictureFrame.setStyle("-fx-background-image: url(" + pic.toURI().toURL() + ");");
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+
+        }, 0, 5, TimeUnit.MINUTES);
+    }
 
     public void setWeatherRequest(DarkSkyRequest darkSky) {
-        ScheduledExecutorService executor = Executors.newScheduledThreadPool(4);
-
         // update of current time
         executor.scheduleAtFixedRate(() -> {
+
             currentController.updateTime(ZonedDateTime.now());
+
         }, 0, 30, TimeUnit.SECONDS);
 
         // update of current weather
@@ -60,6 +92,7 @@ public class MainController {
     }
 
     public void initialize() {
+        executor = Executors.newScheduledThreadPool(4);
         currentController = (WeatherControllerCurrent) current.getProperties().get("control");
 
         dayControllers = new WeatherControllerDay[6];

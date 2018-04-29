@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import manager.GoogleDriveManager;
 import network.DarkSkyRequest;
 import network.GoogleDriveRequest;
 import network.GoogleGeo;
@@ -73,8 +74,11 @@ public class Main extends Application {
         }
 
         control.setWeatherRequest(new DarkSkyRequest(secret, lat, lng));
-
-        GoogleDriveRequest drive = new GoogleDriveRequest(getClass().getResource("config").getPath(), picLoc);
+        control.setGoogleDrive(
+                new GoogleDriveManager(
+                        new GoogleDriveRequest(getClass().getResource("config").getPath(), picLoc)
+                )
+        );
     }
 
 
