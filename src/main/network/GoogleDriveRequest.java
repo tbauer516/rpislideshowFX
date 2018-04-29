@@ -12,23 +12,31 @@ import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
+import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
 
-import java.io.*;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.security.GeneralSecurityException;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class GoogleDriveRequest {
 
-    public GoogleDriveRequest(String configPath) {
+    private Drive service;
+    private String picLoc;
+
+    public GoogleDriveRequest(String configPath, String picLoc) {
+        this.picLoc = picLoc;
+
         try {
             InputStream in = new FileInputStream(configPath + "/client_secret.json");
             JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
             NetHttpTransport transport = GoogleNetHttpTransport.newTrustedTransport();
             GoogleClientSecrets secrets = GoogleClientSecrets.load(jsonFactory, new InputStreamReader(in));
 
-            File datastore = new File(configPath);
+            java.io.File datastore = new java.io.File(configPath);
 
             GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
                     transport,
@@ -41,22 +49,9 @@ public class GoogleDriveRequest {
 
             Credential cred = new AuthorizationCodeInstalledApp(flow, new LocalServerReceiver()).authorize("user");
 
-            Drive service = new Drive.Builder(transport, jsonFactory, cred)
+            service = new Drive.Builder(transport, jsonFactory, cred)
                     .setApplicationName("RPISlideshow")
                     .build();
-
-            FileList result = service.files().list()
-                    .setFields("nextPageToken, files(id, name)")
-                    .execute();
-            List<com.google.api.services.drive.model.File> files = result.getItems();
-            if (files == null || files.isEmpty()) {
-                System.out.println("No files found.");
-            } else {
-                System.out.println("Files:");
-                for (com.google.api.services.drive.model.File file : files) {
-                    System.out.printf("%s (%s)\n", file.getTitle(), file.getId());
-                }
-            }
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -64,5 +59,66 @@ public class GoogleDriveRequest {
         } catch (GeneralSecurityException e) {
             System.out.println("TrustedTransport had an error");
         }
+    }
+
+    public void sync() {
+        Set<String> localFiles = getFilesLocal();
+        Set<String> driveFiles = getFilesInDrive();
+
+        Set<String> toRemove = getFilesToDelete(driveFiles, localFiles);
+        Set<String> toDownload = getFilesToDownload(driveFiles, localFiles);
+    }
+
+    public Set<String> getFilesToDownload(Set<String> drive, Set<String> local) {
+        Set<String> driveCopy = new HashSet<>(drive);
+
+        for (String name : driveCopy) {
+            if (local.contains(name))
+                driveCopy.remove(name);
+        }
+
+        return driveCopy;
+    }
+
+    public Set<String> getFilesToDelete(Set<String> drive, Set<String> local) {
+        Set<String> localCopy = new HashSet<>(local);
+
+        for (String name : localCopy) {
+            if (!drive.contains(name))
+                localCopy.remove(name);
+        }
+
+        return localCopy;
+    }
+
+    public Set<String> getFilesInDrive() {
+        Set<String> fileSet = new HashSet<>();
+
+        try {
+            FileList files = service.files().list()
+                    .setFields("files(id, name)")
+                    .setQ("mimeType = 'image/jpeg' or mimeType = 'image/png'")
+                    .execute();
+
+            for (File file : files.getFiles()) {
+                fileSet.add(file.getName());
+            }
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return fileSet;
+    }
+
+    public Set<String> getFilesLocal() {
+        java.io.File folder = new java.io.File(picLoc);
+        List<java.io.File> files = Arrays.asList(folder.listFiles());
+
+        Set<String> fileSet = new HashSet<>();
+        for (java.io.File file : files) {
+            fileSet.add(file.getName());
+        }
+
+        return fileSet;
     }
 }
