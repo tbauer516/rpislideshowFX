@@ -57,6 +57,8 @@ public class Main extends Application {
 
         primaryStage.setTitle("RPISlideShow");
         primaryStage.setScene(new Scene(root));
+        primaryStage.setWidth(1280);
+        primaryStage.setHeight(720);
         primaryStage.show();
 
         String secret = props.getProperty("darksky.secret");

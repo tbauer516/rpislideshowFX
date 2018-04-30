@@ -60,8 +60,7 @@ public class DarkSkyRequest {
             DarkSkyResponseCurrent resp = response.readEntity(DarkSkyResponseCurrent.class);
             return resp.getData();
         }
-        System.out.println("ERROR! " + response.getStatus());
-        System.out.println(response.getEntity());
+
         return null;
     }
 
@@ -72,8 +71,7 @@ public class DarkSkyRequest {
             DarkSkyResponseForecast resp = response.readEntity(DarkSkyResponseForecast.class);
             return resp.getData();
         }
-        System.out.println("ERROR! " + response.getStatus());
-        System.out.println(response.getEntity());
+
         return null;
     }
 }

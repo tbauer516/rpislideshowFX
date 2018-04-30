@@ -23,12 +23,21 @@ public class WeatherControllerDay {
     private final String windSymbol = " MPH";
     private final String precipSymbol = "%";
 
-    public void update(WeatherDayModel model){
-        this.tempHigh.setText(Math.round(model.tempHigh) + this.tempSymbol);
-        this.tempLow.setText(Math.round(model.tempLow) + this.tempSymbol);
-        this.wind.setText(Math.round(model.wind) + this.windSymbol);
-        this.precipitation.setText(Math.round(model.precip * 100) + this.precipSymbol);
+    public void update(WeatherDayModel model) {
+        if (model == null) {
+            this.tempHigh.setText("?" + this.tempSymbol);
+            this.tempLow.setText("?" + this.tempSymbol);
+            this.wind.setText("?" + this.windSymbol);
+            this.precipitation.setText("?" + this.precipSymbol);
 
-        this.icon.setContent(WeatherIcon.icon(model.icon));
+            this.icon.setContent(WeatherIcon.icon("default"));
+        } else {
+            this.tempHigh.setText(Math.round(model.tempHigh) + this.tempSymbol);
+            this.tempLow.setText(Math.round(model.tempLow) + this.tempSymbol);
+            this.wind.setText(Math.round(model.wind) + this.windSymbol);
+            this.precipitation.setText(Math.round(model.precip * 100) + this.precipSymbol);
+
+            this.icon.setContent(WeatherIcon.icon(model.icon));
+        }
     }
 }

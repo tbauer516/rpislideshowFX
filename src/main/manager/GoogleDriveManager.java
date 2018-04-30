@@ -23,10 +23,13 @@ public class GoogleDriveManager {
 
     public File getPic() {
         index++;
-        if (index == pictures.size()) {
+        if (index >= pictures.size()) {
             index = 0;
             pictures = service.getNewPicList();
         }
+
+        if (pictures.size() == 0)
+            return null;
 
         return pictures.get(index);
     }

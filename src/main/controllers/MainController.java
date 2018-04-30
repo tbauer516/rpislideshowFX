@@ -55,6 +55,9 @@ public class MainController {
 
             File pic = gdrive.getPic();
 
+            if (pic == null)
+                return;
+
             try {
                 pictureFrame.setStyle("-fx-background-image: url(" + pic.toURI().toURL() + ");");
             } catch (MalformedURLException e) {
