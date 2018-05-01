@@ -1,17 +1,13 @@
-package controllers;
+package info.tylerbauer.rpislideshow.controllers;
 
 import javafx.fxml.FXML;
-import javafx.scene.image.Image;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
-import manager.GoogleDriveManager;
-import network.DarkSkyRequest;
-import network.model.WeatherCurrentModel;
-import network.model.WeatherDayModel;
+import info.tylerbauer.rpislideshow.manager.GoogleDriveManager;
+import info.tylerbauer.rpislideshow.network.DarkSkyRequest;
+import info.tylerbauer.rpislideshow.network.model.WeatherCurrentModel;
+import info.tylerbauer.rpislideshow.network.model.WeatherDayModel;
 
-import java.awt.*;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.time.ZonedDateTime;

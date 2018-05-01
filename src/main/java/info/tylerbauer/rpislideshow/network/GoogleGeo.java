@@ -1,8 +1,8 @@
-package network;
+package info.tylerbauer.rpislideshow.network;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import network.model.GeoLoc;
+import info.tylerbauer.rpislideshow.network.model.GeoLoc;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;

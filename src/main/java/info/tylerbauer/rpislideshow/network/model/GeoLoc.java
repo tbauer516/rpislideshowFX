@@ -1,4 +1,4 @@
-package network.model;
+package info.tylerbauer.rpislideshow.network.model;
 
 public class GeoLoc {
     public String lat;

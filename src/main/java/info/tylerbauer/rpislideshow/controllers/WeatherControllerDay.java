@@ -1,10 +1,10 @@
-package controllers;
+package info.tylerbauer.rpislideshow.controllers;
 
-import assets.WeatherIcon;
 import javafx.fxml.FXML;
 import javafx.scene.shape.SVGPath;
 import javafx.scene.text.Text;
-import network.model.WeatherDayModel;
+import info.tylerbauer.rpislideshow.assets.WeatherIcon;
+import info.tylerbauer.rpislideshow.network.model.WeatherDayModel;
 
 public class WeatherControllerDay {
 

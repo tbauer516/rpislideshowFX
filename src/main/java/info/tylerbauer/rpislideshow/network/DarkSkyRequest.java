@@ -1,7 +1,9 @@
-package network;
+package info.tylerbauer.rpislideshow.network;
 
-import controllers.MainController;
-import network.model.*;
+import info.tylerbauer.rpislideshow.network.model.DarkSkyResponseCurrent;
+import info.tylerbauer.rpislideshow.network.model.DarkSkyResponseForecast;
+import info.tylerbauer.rpislideshow.network.model.WeatherCurrentModel;
+import info.tylerbauer.rpislideshow.network.model.WeatherDayModel;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;

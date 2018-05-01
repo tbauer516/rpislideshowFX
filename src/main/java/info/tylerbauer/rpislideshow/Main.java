@@ -1,16 +1,16 @@
-import controllers.MainController;
-import controllers.WeatherControllerCurrent;
+package info.tylerbauer.rpislideshow;
+
+import info.tylerbauer.rpislideshow.controllers.MainController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import manager.GoogleDriveManager;
-import network.DarkSkyRequest;
-import network.GoogleDriveRequest;
-import network.GoogleGeo;
-import network.model.GeoLoc;
-import network.model.WeatherCurrentModel;
+import info.tylerbauer.rpislideshow.manager.GoogleDriveManager;
+import info.tylerbauer.rpislideshow.network.DarkSkyRequest;
+import info.tylerbauer.rpislideshow.network.GoogleDriveRequest;
+import info.tylerbauer.rpislideshow.network.GoogleGeo;
+import info.tylerbauer.rpislideshow.network.model.GeoLoc;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -32,7 +32,7 @@ public class Main extends Application {
 
         Properties props = new Properties();
         try {
-            URL propFile = getClass().getResource("config/applicationConfig.properties");
+            URL propFile = getClass().getResource("java/config/applicationConfig.properties");
             String fileLoc = propFile.getFile();
             propLoc = fileLoc;
             FileInputStream in = new FileInputStream(fileLoc);
@@ -44,14 +44,14 @@ public class Main extends Application {
             System.out.println("There was an error processing the file");
         }
 
-        this.picLoc = getClass().getResource("pictures/").getPath();
+        this.picLoc = getClass().getResource("java/pictures/").getPath();
 
         this.props = props;
     }
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("main.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("java/main.fxml"));
         Parent root = loader.load();
         MainController control = loader.getController();
 
@@ -78,7 +78,7 @@ public class Main extends Application {
         control.setWeatherRequest(new DarkSkyRequest(secret, lat, lng));
         control.setGoogleDrive(
                 new GoogleDriveManager(
-                        new GoogleDriveRequest(getClass().getResource("config").getPath(), picLoc)
+                        new GoogleDriveRequest(getClass().getResource("java/config").getPath(), picLoc)
                 )
         );
     }

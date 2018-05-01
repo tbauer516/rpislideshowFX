@@ -1,4 +1,4 @@
-package network.model;
+package info.tylerbauer.rpislideshow.network.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

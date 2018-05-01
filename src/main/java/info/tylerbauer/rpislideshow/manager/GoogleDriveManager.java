@@ -1,6 +1,6 @@
-package manager;
+package info.tylerbauer.rpislideshow.manager;
 
-import network.GoogleDriveRequest;
+import info.tylerbauer.rpislideshow.network.GoogleDriveRequest;
 
 import java.io.File;
 import java.util.List;

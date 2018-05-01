@@ -6,20 +6,21 @@ apply plugin: 'idea'
 apply plugin: 'application'
 
 task runApp(type: JavaExec) {
-    classpath =  sourceSets.main.runtimeClasspath
+    classpath = sourceSets.main.runtimeClasspath
 
     main = 'Main'
 }
 
-sourceCompatibility = 1.8
+sourceCompatibility = 1.10
+targetCompatibility = 1.10
 
 sourceSets {
     main {
         java {
-            srcDirs = ['src/main']
+            srcDirs = ['src/main/java']
         }
         resources {
-            srcDirs = ['src/resources']
+            srcDirs = ['src/main/resources']
         }
     }
 }

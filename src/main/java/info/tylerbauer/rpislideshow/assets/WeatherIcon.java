@@ -1,4 +1,4 @@
-package assets;
+package info.tylerbauer.rpislideshow.assets;
 
 import java.util.Collections;
 import java.util.HashMap;
