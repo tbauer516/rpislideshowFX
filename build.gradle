@@ -1,9 +1,14 @@
+plugins {
+    id 'java'
+    id 'idea'
+    id 'application'
+    id 'java-library'
+    id 'org.gradle.java.experimental-jigsaw' version '0.1.1'
+}
+
 group 'info.tylerbauer.rpislideshow'
 version '1.0-SNAPSHOT'
-
-apply plugin: 'java'
-apply plugin: 'idea'
-apply plugin: 'application'
+javaModule.name = 'info.tylerbauer.rpislideshow'
 
 task runApp(type: JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
@@ -11,8 +16,12 @@ task runApp(type: JavaExec) {
     main = 'Main'
 }
 
+// Set Target Versions
+
 sourceCompatibility = 1.10
 targetCompatibility = 1.10
+
+// Define Project directories
 
 sourceSets {
     main {
@@ -24,6 +33,8 @@ sourceSets {
         }
     }
 }
+
+// Dependencies Below
 
 repositories {
     mavenCentral()
