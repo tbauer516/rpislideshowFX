@@ -7,7 +7,8 @@
 <?import javafx.scene.shape.SVGPath?>
 <?import javafx.scene.text.Text?>
 
-<GridPane maxHeight="100.0" prefHeight="100.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="java.controllers.WeatherControllerCurrent">
+<GridPane maxHeight="100.0" prefHeight="100.0" xmlns="http://javafx.com/javafx/8.0.121"
+          xmlns:fx="http://javafx.com/fxml/1" fx:controller="info.tylerbauer.rpislideshow.controllers.WeatherControllerCurrent">
     <properties>
         <!-- store controller at key "control" in properties map -->
         <control><fx:reference source="controller" /></control>

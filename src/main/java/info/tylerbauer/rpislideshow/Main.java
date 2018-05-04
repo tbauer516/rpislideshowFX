@@ -32,7 +32,7 @@ public class Main extends Application {
 
         Properties props = new Properties();
         try {
-            URL propFile = getClass().getResource("java/config/applicationConfig.properties");
+            URL propFile = getClass().getResource("/" + getClass().getPackageName() + "/config/applicationConfig.properties");
             String fileLoc = propFile.getFile();
             propLoc = fileLoc;
             FileInputStream in = new FileInputStream(fileLoc);
@@ -44,14 +44,14 @@ public class Main extends Application {
             System.out.println("There was an error processing the file");
         }
 
-        this.picLoc = getClass().getResource("java/pictures/").getPath();
+        this.picLoc = getClass().getResource("/" + getClass().getPackageName() + "/pictures/").getPath();
 
         this.props = props;
     }
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("java/main.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/" + getClass().getPackageName() + "/main.fxml"));
         Parent root = loader.load();
         MainController control = loader.getController();
 
@@ -78,7 +78,7 @@ public class Main extends Application {
         control.setWeatherRequest(new DarkSkyRequest(secret, lat, lng));
         control.setGoogleDrive(
                 new GoogleDriveManager(
-                        new GoogleDriveRequest(getClass().getResource("java/config").getPath(), picLoc)
+                        new GoogleDriveRequest(getClass().getResource("/" + getClass().getPackageName() + "/config").getPath(), picLoc)
                 )
         );
     }

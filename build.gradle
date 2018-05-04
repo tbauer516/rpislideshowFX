@@ -3,17 +3,16 @@ plugins {
     id 'idea'
     id 'application'
     id 'java-library'
-    id 'org.gradle.java.experimental-jigsaw' version '0.1.1'
+    id 'com.zyxist.chainsaw' version '0.3.1'
 }
 
 group 'info.tylerbauer.rpislideshow'
 version '1.0-SNAPSHOT'
-javaModule.name = 'info.tylerbauer.rpislideshow'
 
 task runApp(type: JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
 
-    main = 'Main'
+    main = 'info.tylerbauer.rpislideshow.Main'
 }
 
 // Set Target Versions
@@ -54,4 +53,13 @@ dependencies {
     compile 'javax.activation:activation:1.1'
     // https://stackoverflow.com/questions/43574426/how-to-resolve-java-lang-noclassdeffounderror-javax-xml-bind-jaxbexception-in-j
     compile 'javax.xml.bind:jaxb-api:2.3.0'
+
+//    patch 'javax.annotations.api:jsr305:3.0.0'
+    patch 'com.google.code.findbugs:jsr305:3.0.0'
+//    compile 'javax.annotation:jsr250-api:1.0'
+
+}
+
+javaModule.hacks {
+    patches('com.google.code.findbugs:jsr305', 'javax.annotation:jsr250-api')
 }

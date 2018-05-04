@@ -1,6 +1,8 @@
 module info.tylerbauer.rpislideshow {
     requires javafx.graphics;
     requires javafx.fxml;
+    requires java.ws.rs;
+    requires jackson.annotations;
     requires google.api.client;
     requires google.oauth.client;
     requires google.oauth.client.java6;
