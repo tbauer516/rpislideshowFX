@@ -18,8 +18,8 @@ task runApp(type: JavaExec) {
 
 // Set Target Versions
 
-sourceCompatibility = 1.10
-targetCompatibility = 1.10
+sourceCompatibility = 1.9
+targetCompatibility = 1.9
 
 // Define Project directories
 
