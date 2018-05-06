@@ -33,6 +33,14 @@ sourceSets {
     }
 }
 
+jar {
+    exclude 'META-INF/*.SF', 'META-INF/*.DSA', 'META-INF/*.RSA', 'META-INF/*.MF'
+
+    manifest {
+        attributes 'Main-Class': 'info.tylerbauer.rpislideshow.Main'
+    }
+}
+
 // Dependencies Below
 
 repositories {
@@ -63,3 +71,9 @@ dependencies {
 javaModule.hacks {
     patches('com.google.code.findbugs:jsr305', 'javax.annotation:jsr250-api')
 }
+
+// mkdir build/out
+// jar -c --file=build/out/info-tylerbauer-rpislideshow.jar --main-class=info.tylerbauer.rpislideshow.Main -C build/ .
+// java --module-path build/out:~/.gradle/caches/modules-2/files-2.1 -m info.tylerbauer.rpislideshow/info.tylerbauer.rpislideshow.Main
+// java -jar build/out/info-tylerbauer-rpislideshow.jar
+// jlink --module-path "build/out;/opt/oracle-jdk-10.0.1/jmods" --add-modules info.tylerbauer.rpislideshow --output build/standalone
