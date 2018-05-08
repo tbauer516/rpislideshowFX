@@ -12,4 +12,5 @@ module info.tylerbauer.rpislideshow {
     requires google.api.services.drive.v3.rev110;
 
     exports info.tylerbauer.rpislideshow;
+    opens info.tylerbauer.rpislideshow.controllers;
 }

@@ -15,6 +15,15 @@ task runApp(type: JavaExec) {
     main = 'info.tylerbauer.rpislideshow.Main'
 }
 
+task copyLibs(type: Copy) {
+    into "build/libs"
+    from configurations.runtime
+
+    duplicatesStrategy = duplicatesStrategy.EXCLUDE
+
+    exclude "javax.inject-1.jar"
+}
+
 // Set Target Versions
 
 sourceCompatibility = 1.9
@@ -40,6 +49,7 @@ jar {
         attributes 'Main-Class': 'info.tylerbauer.rpislideshow.Main'
     }
 }
+jar.dependsOn(copyLibs)
 
 // Dependencies Below
 
@@ -72,8 +82,6 @@ javaModule.hacks {
     patches('com.google.code.findbugs:jsr305', 'javax.annotation:jsr250-api')
 }
 
-// mkdir build/out
-// jar -c --file=build/out/info-tylerbauer-rpislideshow.jar --main-class=info.tylerbauer.rpislideshow.Main -C build/ .
-// java --module-path build/out:~/.gradle/caches/modules-2/files-2.1 -m info.tylerbauer.rpislideshow/info.tylerbauer.rpislideshow.Main
-// java -jar build/out/info-tylerbauer-rpislideshow.jar
+// java --module-path build/libs -m info.tylerbauer.rpislideshow/info.tylerbauer.rpislideshow.Main
+// java -jar build/libs/rpislideshow-1.0-SNAPSHOT.jar
 // jlink --module-path "build/out;/opt/oracle-jdk-10.0.1/jmods" --add-modules info.tylerbauer.rpislideshow --output build/standalone
