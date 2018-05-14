@@ -131,6 +131,9 @@ public class GoogleDriveRequest {
 
     private List<java.io.File> getFilesLocal() {
         java.io.File folder = new java.io.File(picLoc);
+        if (!folder.exists()) {
+            folder.mkdirs();
+        }
         List<java.io.File> files = Arrays.asList(folder.listFiles());
 
         List<java.io.File> fileSet = new ArrayList<>(files);

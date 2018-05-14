@@ -13,15 +13,21 @@ task runApp(type: JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
 
     main = 'info.tylerbauer.rpislideshow.Main'
+
+    systemProperty("configPath", "config")
 }
 
 task copyLibs(type: Copy) {
     into "build/libs"
     from configurations.runtime
-
     duplicatesStrategy = duplicatesStrategy.EXCLUDE
-
     exclude "javax.inject-1.jar"
+}
+
+task copyJmods(type: Copy) {
+    into "build/jmods"
+    from System.getProperty("java.home") + "/jmods"
+    duplicatesStrategy = duplicatesStrategy.EXCLUDE
 }
 
 // Set Target Versions
@@ -50,6 +56,7 @@ jar {
     }
 }
 jar.dependsOn(copyLibs)
+jar.dependsOn(copyJmods)
 
 // Dependencies Below
 
@@ -82,6 +89,6 @@ javaModule.hacks {
     patches('com.google.code.findbugs:jsr305', 'javax.annotation:jsr250-api')
 }
 
-// java --module-path build/libs -m info.tylerbauer.rpislideshow/info.tylerbauer.rpislideshow.Main
-// java -jar build/libs/rpislideshow-1.0-SNAPSHOT.jar
-// jlink --module-path "build/out;/opt/oracle-jdk-10.0.1/jmods" --add-modules info.tylerbauer.rpislideshow --output build/standalone
+// java -DconfigPath="config" --module-path build/libs -m info.tylerbauer.rpislideshow/info.tylerbauer.rpislideshow.Main
+// java -DconfigPath="config" -jar build/libs/rpislideshow-1.0-SNAPSHOT.jar
+// jlink --output build/standalone --module-path build/libs:build/jmods --add-modules info.tylerbauer.rpislideshow
