@@ -1,6 +1,6 @@
 # main.config files
 config/*
-#!config/.placeholder
+pictures/
 
 # ide files
 .idea
